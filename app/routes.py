@@ -2,6 +2,7 @@ from app import app
 from flask import render_template
 from flask import request,redirect
 from mysql.connector import connect,Error
+import redshift_connector
 
 @app.route('/')
 @app.route('/index')
@@ -29,6 +30,23 @@ def mysqlquery(subject):
     except Error as e:
         print(e)
 
+def redshiftquery(subject):
+    try:
+        conn = redshift_connector.connect(
+                host = 'project1-redshift.chxau5c0xldf.us-east-2.redshift.amazonaws.com',
+                port = 5439,
+                user = 'awsuser',
+                database ='dev',
+                password = 'Rutgers21'
+            )
+        cursor: redshift_connector.Cursor = conn.cursor()
+        cursor.execute(subject)
+        result = cursor.fetchall()
+        print(result)
+        return result
+    except redshift_connector.Error as e:
+        print(e)
+
 @app.route('/submitquery', methods=['POST'])
 def submitquery():
     if request.method == 'POST':
@@ -39,4 +57,6 @@ def submitquery():
             result = mysqlquery(subject)
         else:
             print('RedShift')
+            result = redshiftquery(subject)
     return render_template('querypage.html',output = result)
+
