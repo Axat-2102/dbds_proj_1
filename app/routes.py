@@ -42,7 +42,6 @@ def redshiftquery(subject):
         cursor: redshift_connector.Cursor = conn.cursor()
         cursor.execute(subject)
         result = cursor.fetchall()
-        print(result)
         return result
     except redshift_connector.Error as e:
         print(e)
