@@ -105,14 +105,15 @@
 
 		</form>
         <label style="color: #4CAF50;" for="subject"><b>Output</b></label>
-        <table>
-            {% for key, value in output.items() %}
-               <tr>
-                    <th> {{ key }} </th>
-                    <td> {{ value }} </td>
-               </tr>
+        <table border="1" style="margin-left:auto;margin-right: auto;">
+            {% for row in output %}
+            <tr>
+                {% for value in row %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-            </table>
+        </table>
 	</div>
 </body>
 </html>

@@ -3,11 +3,6 @@ from flask import render_template
 from flask import request,redirect
 from mysql.connector import connect,Error
 
-def Convert(tup, di):
-    for a, b in tup:
-        di.setdefault(a, []).append(b)
-    return di
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -15,7 +10,7 @@ def index():
 
 @app.route('/querypage')
 def querypage():
-    return render_template('querypage.html',output = '')
+    return render_template('querypage.html',output = {})
 
 def mysqlquery(subject):
     try:
@@ -28,9 +23,9 @@ def mysqlquery(subject):
         ) as connection:
             with connection.cursor() as cursor:
                 cursor.execute(subject)
-                output = {}
-                Convert(cursor.fetchall(),output)
-                return output
+                result = cursor.fetchall()
+                result.insert(0,cursor.column_names)
+                return result
     except Error as e:
         print(e)
 
