@@ -62,7 +62,7 @@
 						dbms: mysql.checked ? 'MySQL' : 'RedShift',
 						subject: subject.value
 					})
-				const response = await fetch("http://localhost:5000/submitquery", {
+				const response = await fetch(window.location.protocol + '//' + window.location.host + "/submitquery", {
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/json'
