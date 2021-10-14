@@ -19,7 +19,7 @@ def mysqlquery(subject):
             host = 'database-1.caytflhlgy1t.us-east-2.rds.amazonaws.com',
             port = '3306',
             user = 'admin',
-            database ='instacart',
+            database ='instacartNormalised',
             password = 'rutgers21'
         ) as connection:
             with connection.cursor() as cursor:
