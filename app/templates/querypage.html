@@ -3,82 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Query Response Page</title>
-	<style type="text/css">
-		body, html {
-  			height: 100%;
-  			margin: 0;
-  			font-family: Arial, Helvetica, sans-serif;
-		}
-		.bg-image {
-  			background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("images/bg_image.jpg");
-  			height: 50%;
-  			background-position: center;
-  			background-repeat: no-repeat;
-  			background-size: cover;
-  			position: relative;
-		}
-
-		.bg-text {
-  			text-align: center;
-  			position: absolute;
-  			top: 50%;
-  			left: 50%;
-  			transform: translate(-50%, -50%);
-  			color: white;
-		}
-		.query {
-   			margin-left:auto; 
-    		margin-right:auto;
- 		}
- 		textarea {
-  			width: 100%;
-  			padding: 12px;
-  			border: 1px solid #ccc;
-  			border-radius: 4px;
-  			box-sizing: border-box;
-  			margin-top: 6px;
-  			margin-bottom: 16px;
-  			resize: vertical;
-		}
-		.container {
-  			border-radius: 5px;
-  			background-color: #f2f2f2;
-  			padding: 20px;
-  			margin-top : 100px;
-			text-align: center;
-		}
-
-		input[type=submit] {
-  			background-color: #04AA6D;
-  			color: white;
-  			padding: 12px 20px;
-  			border: none;
-  			border-radius: 4px;
-  			cursor: pointer;
-		}
-
-		input[type=submit]:hover {
-  			background-color: #45a049;
-		}
-
-		input[type=reset] {
-  			background-color: #04AA6D;
-  			color: white;
-  			padding: 12px 20px;
-  			border: none;
-  			border-radius: 4px;
-  			cursor: pointer;
-		}
-
-		input[type=reset]:hover {
-  			background-color: #9b111e;
-		}
-
-  		form { 
-			margin: 0 auto; 
-			width:75%;
-		}
-	</style>
+	<link rel="stylesheet" href="{{url_for('static',filename='styles/querypage.css')}}">
 </head>
 <body>
 	<div class="bg-image">
@@ -91,7 +16,7 @@
 	<h1 style="color: #4CAF50; text-align: center;">Database - Instacart</h1>
 
 	<div class="container">
-		<form method="POST" action="/submitquery">
+		<form id="queryform">
 			<label style="color: #4CAF50;"><b>DBMS Type:</b></label><br>
 			<input type="radio" id="mysql" name="dbms" value="MySQL">
 			<label class="lb1" for="mysql">MySQL</label>
@@ -105,15 +30,76 @@
 
 		</form>
         <label style="color: #4CAF50;" for="subject"><b>Output</b></label>
-        <table border="1" style="margin-left:auto;margin-right: auto;">
-            {% for row in output %}
-            <tr>
-                {% for value in row %}
-                <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </table>
+		<p style="color: blue" id="loading"></p>
+		<p style="color: red" id="error"></p>
+		<p id="timeelapsed"></p>
+        <table border="1" style="margin-left:auto;margin-right: auto;" id="mytable"></table>
 	</div>
+	<script>
+		const submitquery = async (e) => {
+			e.preventDefault();
+
+			var mysql = document.getElementById("mysql")
+			var redshift = document.getElementById("redshift")
+
+			if (mysql.checked == false && redshift.checked == false) {
+				document.getElementById("error").innerText = "Please Select a Database";
+				return false;
+			}
+
+			var subject = document.getElementById("subject")
+
+			if (subject.value == "") {
+				document.getElementById("error").innerText = "Please Enter a Query";
+				return false;
+			}
+
+			document.getElementById("error").innerText = "";
+			document.getElementById("loading").innerText = "Loading...";
+
+			try {
+				var data = JSON.stringify({
+						dbms: mysql.checked ? 'MySQL' : 'RedShift',
+						subject: subject.value
+					})
+				const response = await fetch("http://localhost:5000/submitquery", {
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: data
+				})
+
+				const json = await response.json();
+				const {output, time_elapsed} = json;
+				document.getElementById("timeelapsed").innerText = `Time Elapsed: ${time_elapsed} seconds`
+				createOutputTable(output)
+				document.getElementById("loading").innerText = "";
+			} catch (error) {
+				document.getElementById("loading").innerText = "";
+				document.getElementById("error").innerText = "An Error Occured! Try Again"
+				document.getElementById("timeelapsed").innerText = ""
+				document.getElementById("mytable").innerHTML = ""
+			}
+
+			return false;
+		}
+
+		const createOutputTable = (output) => {
+			var mytable = document.getElementById("mytable");
+			for(let i=0; i<output.length; i++) {
+				let row = output[i];
+				var tr = document.createElement("tr");
+				for(let j=0; j<row.length; j++) {
+					var td = document.createElement("td"); 
+					td.innerText = row[j];
+					tr.appendChild(td)
+				}
+				mytable.appendChild(tr);
+			}
+		}
+
+		document.getElementById("queryform").onsubmit = submitquery;
+	</script>
 </body>
 </html>

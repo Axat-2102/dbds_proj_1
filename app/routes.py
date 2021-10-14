@@ -1,8 +1,8 @@
 from app import app
-from flask import render_template
-from flask import request,redirect
+from flask import render_template, request, json
 from mysql.connector import connect,Error
 import redshift_connector
+import time
 
 @app.route('/')
 @app.route('/index')
@@ -11,7 +11,7 @@ def index():
 
 @app.route('/querypage')
 def querypage():
-    return render_template('querypage.html',output = {})
+    return render_template('querypage.html',output = {}, time_elapsed = '-')
 
 def mysqlquery(subject):
     try:
@@ -23,10 +23,13 @@ def mysqlquery(subject):
             password = 'rutgers21'
         ) as connection:
             with connection.cursor() as cursor:
+                start = time.time()
                 cursor.execute(subject)
                 result = cursor.fetchall()
                 result.insert(0,cursor.column_names)
-                return result
+                end = time.time()
+                time_elapsed = end - start
+                return result,time_elapsed
     except Error as e:
         print(e)
 
@@ -40,22 +43,23 @@ def redshiftquery(subject):
                 password = 'Rutgers21'
             )
         cursor: redshift_connector.Cursor = conn.cursor()
+        start = time.time()
         cursor.execute(subject)
         result = cursor.fetchall()
-        return result
+        end = time.time()
+        time_elapsed = end - start
+        return result, time_elapsed
     except redshift_connector.Error as e:
         print(e)
 
 @app.route('/submitquery', methods=['POST'])
 def submitquery():
     if request.method == 'POST':
-        req = request.form
+        req = request.get_json()
         dbms = req['dbms']
         subject = req['subject']
         if dbms == 'MySQL':
-            result = mysqlquery(subject)
+            result, time_elapsed = mysqlquery(subject)
         else:
-            print('RedShift')
-            result = redshiftquery(subject)
-    return render_template('querypage.html',output = result)
-
+            result, time_elapsed = redshiftquery(subject)
+    return json.jsonify(output = result, time_elapsed = str(time_elapsed))
