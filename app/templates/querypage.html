@@ -21,7 +21,10 @@
 			<input type="radio" id="mysql" name="dbms" value="MySQL">
 			<label class="lb1" for="mysql">MySQL</label>
 			<input type="radio" id="redshift" name="dbms" value="RedShift">
-			<label class="lb1" for="redshift">RedShift</label><br><br>
+			<label class="lb1" for="redshift">RedShift</label>
+			<input type="radio" id="mssql" name="dbms" value="MSSQL">
+			<label class="lb1" for="mssql">MSSQL</label>
+			<br><br>
 
 			<label style="color: #4CAF50;" for="subject"><b>Input</b></label>
     		<textarea id="subject" name="subject" placeholder="Enter your SQL Query..." style="height:200px"></textarea>
@@ -41,8 +44,9 @@
 
 			var mysql = document.getElementById("mysql")
 			var redshift = document.getElementById("redshift")
+			var mssql = document.getElementById("mssql")
 
-			if (mysql.checked == false && redshift.checked == false) {
+			if (mysql.checked == false && redshift.checked == false && mssql.checked == false) {
 				document.getElementById("error").innerText = "Please Select a Database";
 				return false;
 			}
@@ -58,8 +62,13 @@
 			document.getElementById("loading").innerText = "Loading...";
 
 			try {
+				let dbms;
+				if (mysql.checked) dbms = 'MySQL';
+				else if (redshift.checked) dbms = 'RedShift';
+				else dbms = 'MSSQL';
+
 				var data = JSON.stringify({
-						dbms: mysql.checked ? 'MySQL' : 'RedShift',
+						dbms,
 						subject: subject.value
 					})
 				const response = await fetch(window.location.protocol + '//' + window.location.host + "/submitquery", {

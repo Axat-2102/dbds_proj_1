@@ -2,6 +2,7 @@ from app import app
 from flask import render_template, request, json
 from mysql.connector import connect,Error
 import redshift_connector
+import pymssql
 import time
 
 @app.route('/')
@@ -33,6 +34,19 @@ def mysqlquery(subject):
     except Error as e:
         print(e)
 
+def mssqlquery(subject):
+    try:
+        conn = pymssql.connect('database-2.caytflhlgy1t.us-east-2.rds.amazonaws.com', 'admin', 'rutgers21', 'adnimerge')
+        cursor: pymssql.Cursor = conn.cursor(as_dict=True)
+        start = time.time()
+        cursor.execute(subject)
+        result = cursor.fetchall()
+        end = time.time()
+        time_elapsed = end - start
+        return result, time_elapsed
+    except Error as e:
+        print(e)
+
 def redshiftquery(subject):
     try:
         conn = redshift_connector.connect(
@@ -60,6 +74,8 @@ def submitquery():
         subject = req['subject']
         if dbms == 'MySQL':
             result, time_elapsed = mysqlquery(subject)
-        else:
+        elif dbms == 'RedShift':
             result, time_elapsed = redshiftquery(subject)
+        else:
+            result, time_elapsed = mssqlquery(subject)
     return json.jsonify(output = result, time_elapsed = str(time_elapsed))

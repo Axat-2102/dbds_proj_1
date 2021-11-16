@@ -8,6 +8,7 @@ flask = "*"
 flask-session = "*"
 mysql-connector-python = "*"
 redshift-connector = "*"
+pymssql = "*"
 
 [dev-packages]
 
