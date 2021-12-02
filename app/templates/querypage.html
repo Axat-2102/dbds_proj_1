@@ -13,26 +13,32 @@
   		</div>
 	</div>
 
-	<h1 style="color: #4CAF50; text-align: center;">Database - Instacart</h1>
+
+	<div class="img_container">
+		<button class="btn" onclick="showimg()">Instacart ER-diagram</button>
+		<img id = "img" src="instacart_er.png" alt="er_diagram" style="width:100%">
+	</div>
 
 	<div class="container">
-		<form id="queryform">
-			<label style="color: #4CAF50;"><b>DBMS Type:</b></label><br>
+		<form method="POST">
+			<label style="color: #4CAF50;"><b>DBMS Type:</b></label><br><br>
 			<input type="radio" id="mysql" name="dbms" value="MySQL">
 			<label class="lb1" for="mysql">MySQL</label>
 			<input type="radio" id="redshift" name="dbms" value="RedShift">
 			<label class="lb1" for="redshift">RedShift</label>
 			<input type="radio" id="mssql" name="dbms" value="MSSQL">
-			<label class="lb1" for="mssql">MSSQL</label>
-			<br><br>
+			<label class="lb1" for="mssql">MongoDB</label><br><br><br><br>
+
 
 			<label style="color: #4CAF50;" for="subject"><b>Input</b></label>
-    		<textarea id="subject" name="subject" placeholder="Enter your SQL Query..." style="height:200px"></textarea>
+    		<textarea id="subject" name="subject" placeholder="Enter your SQL Query..." style="height:200px"></textarea><br>
 			<input type="submit" value="Submit">
-        	<input type="reset" value="Reset"><br><br>
+        	<input type='button' onclick='location.reload();' value='Reset'><br><br>
+
 
 		</form>
-        <label style="color: #4CAF50;" for="subject"><b>Output</b></label>
+	</div>
+	 <label class="outpt" style="color: #4CAF50;" for="subject"><b>Output</b></label><button class="btnDownload"><i class="fa fa-download"></i></button>
 		<p style="color: blue" id="loading"></p>
 		<p style="color: red" id="error"></p>
 		<p id="timeelapsed"></p>
