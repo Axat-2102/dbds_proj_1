@@ -22,14 +22,22 @@
 	<div class="container">
 		<form method="POST">
 			<label style="color: #4CAF50;"><b>DBMS Type:</b></label><br><br>
+
 			<input type="radio" id="mysql" name="dbms" value="MySQL">
 			<label class="lb1" for="mysql">MySQL</label>
+
 			<input type="radio" id="redshift" name="dbms" value="RedShift">
 			<label class="lb1" for="redshift">RedShift</label>
+
 			<input type="radio" id="mssql" name="dbms" value="MSSQL">
-			<label class="lb1" for="mssql">MongoDB</label><br><br><br><br>
+			<label class="lb1" for="mssql">MSSQL</label>
+
+			<input type="radio" id="mongodb" name="dbms" value="MongoDB">
+			<label class="lb1" for="mongodb">MongoDB</label><br><br><br><br>
+
 			<label style="color: #4CAF50;" for="subject"><b>Input</b></label>
     		<textarea id="subject" name="subject" placeholder="Enter your SQL Query..." style="height:200px"></textarea><br>
+			
 			<input type="submit" value="Submit">
         	<input type="reset" value="Reset" onclick="resetclick()"><br><br>
 		</form>

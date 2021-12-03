@@ -3,6 +3,7 @@ from flask import render_template, request, json
 from mysql.connector import connect,Error
 import redshift_connector
 import pymssql
+import pyodbc
 import time
 
 @app.route('/')
@@ -66,6 +67,22 @@ def redshiftquery(subject):
     except redshift_connector.Error as e:
         print(e)
 
+def mongoquery(subject):
+    try:    
+        con = pyodbc.connect('DRIVER={Devart ODBC Driver for MongoDB};'
+                                            'Server=127.0.0.1;'
+                                            'Port=27017;'
+                                            'Database=adnimerge')
+        start = time.time()
+        cursor = con.cursor()
+        cursor.execute(subject)
+        result = cursor.fetchall()
+        end = time.time()
+        time_elapsed = end - start
+        return result, time_elapsed
+    except pyodbc.Error as e:
+        print(e)
+
 @app.route('/submitquery', methods=['POST'])
 def submitquery():
     if request.method == 'POST':
@@ -76,6 +93,8 @@ def submitquery():
             result, time_elapsed = mysqlquery(subject)
         elif dbms == 'RedShift':
             result, time_elapsed = redshiftquery(subject)
-        else:
+        elif dbms == 'MSSQL':
             result, time_elapsed = mssqlquery(subject)
+        else:
+            result, time_elapsed = mongoquery(subject)
     return json.jsonify(output = result, time_elapsed = str(time_elapsed))
