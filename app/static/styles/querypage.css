@@ -34,41 +34,96 @@ textarea {
     margin-bottom: 16px;
     resize: vertical;
 }
+.img_container {
+  	border-radius: 0px;
+  	background-color: #f2f2f2;
+  	float: left;
+  	width: 49.3%;
+  	height: 522px;
+  	padding: 5px;
+}
+
 .container {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    margin-top : 100px;
-  text-align: center;
+  	border-radius: 0px;
+  	background-color: #f2f2f2;
+  	float: right;
+  	width: 49.3%;
+  	height: 522px;
+  	padding: 5px;
+
+}
+
+.img_container img {
+  	width: 100%;
+  	height: auto;
+  	visibility: hidden;
+
+}
+
+.img_container .btn {
+	border-radius: 0px;
+  	background-color: #f2f2f2;
+  	float: left;
+  	width: 49.3%;
+  	padding: 5px;
+  	background-color: #04AA6D;
+  	color: white;
+  	font-size: 16px;
+  	cursor: pointer;
+  	text-align: center;
+}
+
+.img_container .btn:hover {
+  	background-color: #45a049;
 }
 
 input[type=submit] {
-    background-color: #04AA6D;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  	background-color: #04AA6D;
+  	color: white;
+  	padding: 12px 20px;
+  	border: none;
+  	border-radius: 4px;
+  	cursor: pointer;
 }
 
 input[type=submit]:hover {
-    background-color: #45a049;
+  	background-color: #45a049;
 }
 
-input[type=reset] {
-    background-color: #04AA6D;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+input[type=button] {
+  	background-color: #04AA6D;
+  	color: white;
+  	padding: 12px 20px;
+  	border: none;
+  	border-radius: 4px;
+  	cursor: pointer;
 }
 
-input[type=reset]:hover {
-    background-color: #9b111e;
+input[type=button]:hover {
+  	background-color: #9b111e;
 }
 
-form { 
-  margin: 0 auto; 
-  width:75%;
+  form { 
+	margin: 0 auto; 
+	width:75%;
+}
+
+.outpt{
+	display: block;
+    text-align: center;
+}
+
+.btnDownload {
+  	background-color: #04AA6D;
+  	border: none;
+  	color: white;
+  	padding: 5px 15px;
+  	cursor: pointer;
+  	font-size: 12px;
+  	display: block;
+  	text-align: right;
+}
+
+.btnDownload:hover {
+  	background-color: #45a049;
 }
