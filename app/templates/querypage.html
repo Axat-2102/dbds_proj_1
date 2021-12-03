@@ -16,7 +16,7 @@
 
 	<div class="img_container">
 		<button class="btn" onclick="showimg()">Instacart ER-diagram</button>
-		<img id = "img" src="{{ url_for('static',filename='images/instacart_er.png')}}" alt="er_diagram" style="width:100%">
+		<img id = "img" src="instacart_er.png" alt="er_diagram" style="width:100%">
 	</div>
 
 	<div class="container">
@@ -38,7 +38,7 @@
 
 		</form>
 	</div>
-	 <label class="outpt" style="color: #4CAF50;" for="subject"><b>Output</b></label><button class="btnDownload"><i class="fa fa-download"></i></button>
+	 <label class="outpt" style="color: #4CAF50;" for="subject"><b>Output</b></label><button class="btnDownload" onclick="convertCSV()"><i class="fa fa-download"></i></button>
 		<p style="color: blue" id="loading"></p>
 		<p style="color: red" id="error"></p>
 		<p id="timeelapsed"></p>
@@ -114,7 +114,41 @@
 			}
 		}
 
+		function convertCSV()
+		{
+			createOutputTable(output)
+			var csv = [];
+			var row = document.getElementsByTagName('tr');
+            for (var i = 0; i < row.length; i++)
+            {
+            	var col = row[i].querySelectorAll('td,th');
+            	var csvrow = [];
+                for (var j = 0; j < col.length; j++)
+                {
+                	csvrow.push(col[j].innerHTML);
+                }
+                csv.push(csvrow.join(","));
+            }
+            csv = csv_data.join('\n');
+            downloadfile(csv);
+
+		}
+
+		function downloadfile(csv)
+		{
+			CSVFile = new Blob([csv_data],{type: "text/csv"});
+			var t_link = document.createElement('a');
+			t_link.download = "Download.csv";
+			var url = window.URL.createObjectURL(CSVFile);
+            t_link.href = url;
+            t_link.style.display = "none";
+            document.body.appendChild(t_link);
+            t_link.click();
+            document.body.removeChild(t_link);
+		}
+
 		document.getElementById("queryform").onsubmit = submitquery;
 	</script>
+
 </body>
 </html>
