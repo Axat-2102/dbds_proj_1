@@ -29,7 +29,7 @@
 			<label style="color: #4CAF50;" for="subject"><b>Input</b></label>
     		<textarea id="subject" name="subject" placeholder="Enter your SQL Query..." style="height:200px"></textarea>
 			<input type="submit" value="Submit">
-        	<input type="reset" value="Reset"><br><br>
+        	<input type="reset" value="Reset" onclick="resetclick()"><br><br>
 
 		</form>
         <label style="color: #4CAF50;" for="subject"><b>Output</b></label>
@@ -39,6 +39,10 @@
         <table border="1" style="margin-left:auto;margin-right: auto;" id="mytable"></table>
 	</div>
 	<script>
+		const resetclick = () => {
+			document.getElementById("timeelapsed").innerText = ""
+			document.getElementById("mytable").innerHTML = ""
+		}
 		const submitquery = async (e) => {
 			e.preventDefault();
 
