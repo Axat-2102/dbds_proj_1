@@ -13,7 +13,7 @@
     		<h1 style="font-size:50px">CS527 DATABASE FOR DATA SCIENCE PROJECT</h1>
     		<p>Team 8</p>
   		</div>
-	</div>
+	</div>;''
 
 	<!-- Diagram & Query Section-->
 	<div class="query-section">
@@ -71,6 +71,7 @@
 		const resetclick = () => {
 			document.getElementById("timeelapsed").innerText = ""
 			document.getElementById("mytable").innerHTML = ""
+			document.getElementById("error").innerText = ""
 		}
 		const submitquery = async (e) => {
 			e.preventDefault();
@@ -121,7 +122,7 @@
 				document.getElementById("loading").innerText = "";
 			} catch (error) {
 				document.getElementById("loading").innerText = "";
-				document.getElementById("error").innerText = "An Error Occured! Try Again"
+				document.getElementById("error").innerText = "An Error occured! Try again";
 				document.getElementById("timeelapsed").innerText = ""
 				document.getElementById("mytable").innerHTML = ""
 			}
