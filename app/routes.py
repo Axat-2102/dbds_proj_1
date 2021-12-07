@@ -80,6 +80,8 @@ def mongoquery(subject):
         end = time.time()
         time_elapsed = end - start
         data = []
+        columns = [column[0] for column in cursor.description]
+        data.append(columns) 
         for row in result:
             data.append(list(row))
         return data, time_elapsed
