@@ -79,7 +79,10 @@ def mongoquery(subject):
         result = cursor.fetchall()
         end = time.time()
         time_elapsed = end - start
-        return result, time_elapsed
+        data = []
+        for row in result:
+            data.append(list(row))
+        return data, time_elapsed
     except pyodbc.Error as e:
         print(e)
 
