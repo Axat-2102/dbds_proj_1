@@ -66,8 +66,9 @@ def redshiftquery(subject):
         #return result, time_elapsed
         data = []
         columns = [column[0] for column in cursor.description]
-        data.append(columns) 
-        data.apppend(result)
+        data.append(columns)
+        for row in result:
+            data.append(list(row))
         return data, time_elapsed
     except redshift_connector.Error as e:
         print(e)
