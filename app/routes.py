@@ -60,7 +60,15 @@ def redshiftquery(subject):
         cursor: redshift_connector.Cursor = conn.cursor()
         start = time.time()
         cursor.execute(subject)
-        result = cursor.fetchall()
+        result: pd.DataFrame = cursor.fetch_dataframe()
+        data =  result.values.tolist()
+        col = (result.columns.values)
+        col = list(col)
+        data.insert(0,col)
+        data2 = tuple(data)
+        end = time.time()
+        time_elapsed = end - start
+        return data2, time_elapsed
         end = time.time()
         time_elapsed = end - start
         return result, time_elapsed
