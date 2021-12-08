@@ -39,10 +39,17 @@ def mysqlquery(subject):
 def mssqlquery(subject):
     try:
         conn = pymssql.connect('database-2.caytflhlgy1t.us-east-2.rds.amazonaws.com', 'admin', 'rutgers21', 'adnimerge')
-        cursor: pymssql.Cursor = conn.cursor(as_dict=True)
+        cursor: pymssql.Cursor = conn.cursor()
         start = time.time()
         cursor.execute(subject)
         result = cursor.fetchall()
+        desc = cursor.description
+        cols = []
+        for col in desc:
+            cols.append(col[0])
+        result.insert(0,cols)
+        end = time.time()
+        time_elapsed = end - start
         end = time.time()
         time_elapsed = end - start
         return "",result, time_elapsed
