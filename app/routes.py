@@ -43,6 +43,13 @@ def mssqlquery(subject):
         start = time.time()
         cursor.execute(subject)
         result = cursor.fetchall()
+        desc = cursor.description
+        cols = []
+        for col in desc:
+            cols.append(col[0])
+        result.insert(0,cols)
+        end = time.time()
+        time_elapsed = end - start
         end = time.time()
         time_elapsed = end - start
         return "",result, time_elapsed
