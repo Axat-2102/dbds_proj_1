@@ -31,9 +31,10 @@ def mysqlquery(subject):
                 result.insert(0,cursor.column_names)
                 end = time.time()
                 time_elapsed = end - start
-                return result,time_elapsed
+                return "",result,time_elapsed
     except Error as e:
         print(e)
+        return str(e.msg),"",0
 
 def mssqlquery(subject):
     try:
@@ -44,9 +45,10 @@ def mssqlquery(subject):
         result = cursor.fetchall()
         end = time.time()
         time_elapsed = end - start
-        return result, time_elapsed
+        return "",result, time_elapsed
     except Error as e:
         print(e)
+        return str(e.msg),"",0
 
 def redshiftquery(subject):
     try:
@@ -68,15 +70,17 @@ def redshiftquery(subject):
         data2 = tuple(data)
         end = time.time()
         time_elapsed = end - start
-        return data2, time_elapsed
-        end = time.time()
-        time_elapsed = end - start
-        return result, time_elapsed
-    except redshift_connector.Error as e:
+        return "",data2, time_elapsed
+    except Exception as e:
         print(e)
+        #ex = json.loads(str(e).replace("'", '"').replace("\n", "\\n"))['M']
+        #idx1 = str(e).index('M')
+        #idx2 =  str(e).index('F')
+        #ex = str(e)[idx1+3:idx2-2]
+        return str(e),"",0
 
 def mongoquery(subject):
-    try:    
+    try:
         con = pyodbc.connect('DRIVER={Devart ODBC Driver for MongoDB};'
                                             'Server=127.0.0.1;'
                                             'Port=27017;'
@@ -89,12 +93,13 @@ def mongoquery(subject):
         time_elapsed = end - start
         data = []
         columns = [column[0] for column in cursor.description]
-        data.append(columns) 
+        data.append(columns)
         for row in result:
             data.append(list(row))
-        return data, time_elapsed
+        return "",data, time_elapsed
     except pyodbc.Error as e:
-        print(e)
+        sqlstate = e.args[1]
+        return sqlstate,"",0
 
 @app.route('/submitquery', methods=['POST'])
 def submitquery():
@@ -103,11 +108,11 @@ def submitquery():
         dbms = req['dbms']
         subject = req['subject']
         if dbms == 'MySQL':
-            result, time_elapsed = mysqlquery(subject)
+            error_ret, result, time_elapsed = mysqlquery(subject)
         elif dbms == 'RedShift':
-            result, time_elapsed = redshiftquery(subject)
+            error_ret, result, time_elapsed = redshiftquery(subject)
         elif dbms == 'MSSQL':
-            result, time_elapsed = mssqlquery(subject)
+            error_ret, result, time_elapsed = mssqlquery(subject)
         else:
-            result, time_elapsed = mongoquery(subject)
-    return json.jsonify(output = result, time_elapsed = str(time_elapsed))
+            error_ret, result, time_elapsed = mongoquery(subject)
+    return json.jsonify(error_returned = error_ret, output = result, time_elapsed = str(time_elapsed))
