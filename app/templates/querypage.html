@@ -133,6 +133,7 @@
 
                 const createOutputTable = (output) => {
                         var mytable = document.getElementById("mytable");
+                        mytable.innerHTML = "";
                         for(let i=0; i<output.length; i++) {
                                 let row = output[i];
                                 var tr = document.createElement("tr");
