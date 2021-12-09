@@ -34,7 +34,7 @@ def mysqlquery(subject):
                 return "",result,time_elapsed
     except Error as e:
         print(e)
-        return str(e),"",0
+        return str(e.msg),"",0
 
 def mssqlquery(subject):
     try:
@@ -55,7 +55,7 @@ def mssqlquery(subject):
         return "",result, time_elapsed
     except Exception as e:
         print(e)
-        return str(e.msg),"",0
+        return str(e),"",0
 
 def redshiftquery(subject):
     try:
