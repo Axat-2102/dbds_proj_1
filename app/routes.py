@@ -27,6 +27,7 @@ def mysqlquery(subject):
             with connection.cursor() as cursor:
                 start = time.time()
                 cursor.execute(subject)
+                print("subject:", subject)
                 result = cursor.fetchall()
                 result.insert(0,cursor.column_names)
                 end = time.time()
@@ -40,6 +41,7 @@ def mssqlquery(subject):
     try:
         conn = pymssql.connect('database-2.caytflhlgy1t.us-east-2.rds.amazonaws.com', 'admin', 'rutgers21', 'adnimerge')
         cursor: pymssql.Cursor = conn.cursor()
+        print("subject:", subject)
         start = time.time()
         cursor.execute(subject)
         result = cursor.fetchall()
@@ -67,6 +69,7 @@ def redshiftquery(subject):
                 password = 'Rutgers21'
             )
         cursor: redshift_connector.Cursor = conn.cursor()
+        print("subject:", subject)
         start = time.time()
         cursor.execute(subject)
         result: pd.DataFrame = cursor.fetch_dataframe()
@@ -94,6 +97,7 @@ def mongoquery(subject):
                                             'Database=adnimerge')
         start = time.time()
         cursor = con.cursor()
+        print("subject:", subject)
         cursor.execute(subject)
         result = cursor.fetchall()
         end = time.time()
