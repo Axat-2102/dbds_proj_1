@@ -34,7 +34,7 @@ def mysqlquery(subject):
                 return "",result,time_elapsed
     except Error as e:
         print(e)
-        return str(e.msg),"",0
+        return str(e),"",0
 
 def mssqlquery(subject):
     try:
