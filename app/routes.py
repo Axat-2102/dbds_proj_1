@@ -53,7 +53,7 @@ def mssqlquery(subject):
         end = time.time()
         time_elapsed = end - start
         return "",result, time_elapsed
-    except Error as e:
+    except Exception as e:
         print(e)
         return str(e.msg),"",0
 
