@@ -114,3 +114,9 @@ form {
 	padding: 0px;
 	margin-left: 10px;
 }
+
+footer {
+  padding: 3px;
+  background-color: #04AA6D;
+  color: white;
+}
